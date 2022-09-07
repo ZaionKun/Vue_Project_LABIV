@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <nav>
+      <!-- rotas internas sempre utilize router-link -->
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link>|
+      <router-link to="/usuario">Usuário</router-link>
     </nav>
     <router-view/>
   </div>
