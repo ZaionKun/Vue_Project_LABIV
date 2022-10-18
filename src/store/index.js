@@ -1,51 +1,40 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import axios from 'axios';
-import router from '../router';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import AppView from '../views/AppView.vue'
 
-Vue.use(Vuex)
+Vue.use(VueRouter)
 
-export default new Vuex.Store({
-  state: {
-    token: null,
-    usuario: null,
-    autorizacao: null
+const routes = [
+  {
+    path: '/',
+    name: 'app',
+    component: AppView,
+    children: [
+      {
+        path: '/usuario',
+        component: () => import('../views/UsuarioView.vue')
+      },
+      {
+        path: '/',
+        component: () => import('../views/HomeView.vue')
+      },
+      {
+        path: '/about',
+        component: () => import('../views/AboutView.vue')
+      }
+    ]
   },
-  getters: {
-  },
-  mutations: {
-    setUsuario(state, usuario) {
-      state.usuario = usuario;
-    },
-    setToken(state, token) {
-      state.token = token;
-    },
-    setAutorizacao(state, autorizacao) {
-      state.autorizacao = autorizacao;
-    },
-    logout(state) {
-      state.token = null;
-      state.usuario = null;
-      state.autorizacao = null;
-    }
-  },
-  actions: {
-    login(context, { usuario, senha }) {
-      axios
-        .post("login", {
-          nome: usuario,
-          senha: senha
-        })
-        .then(res => {
-          console.log(res);
-          context.commit('setUsuario', usuario);
-          context.commit('setToken', res.data.token);
-          context.commit('setAutorizacao', res.data.autorizacao);
-          router.push('/');
-        })
-        .catch(error => console.log(error));
-    }
-  },
-  modules: {
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
   }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
 })
+
+export default router
